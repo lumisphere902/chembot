@@ -118,11 +118,15 @@ public class Chemical {
 		if (amount != 1) {
 			str+=amount;
 		}
+		boolean endsWith = false;
 		for(int i = 0;i<elems.size();i++){
+			if (i > 0) {
+				str+="}";
+			}
 			Element cur = elems.get(i);
-			str+=chemTable[cur.id-1]+"_{"+(cur.amount == 1 ? "":cur.amount) +"}";
+			str+=chemTable[cur.id-1]+"_{"+(cur.amount == 1 ? "":cur.amount);
 		}
-		str+="_{"+phase+"}";
+		str+="("+phase+")}";
 		return str;
 	}
 }
