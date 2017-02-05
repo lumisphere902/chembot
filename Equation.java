@@ -44,11 +44,9 @@ public class Equation {
 				}
 			}
 
-			System.out.println(arr);
 			if (arr.size() > 0) {
 				Element elemToChange = arr.get(0);
 				if (elemToChange.amount < 0) {
-					System.out.println("Adding reactant");
 					for (int i = 0; i < reactants.size(); i++) {
 						Chemical cur = reactants.get(i);
 						if (indexOf(cur.elems, elemToChange) != -1) {
@@ -57,7 +55,6 @@ public class Equation {
 						}
 					}
 				} else{
-					System.out.println("Adding product");
 					for (int i = 0; i < products.size(); i++) {
 						Chemical cur = products.get(i);
 						if (indexOf(cur.elems, elemToChange) != -1) {
@@ -100,13 +97,13 @@ public class Equation {
 
 	public int amountOf(Chemical c) {
 		for (int i = 0; i < reactants.size(); i++) {
-			if (reactants.get(i).name.equals(c.name)) {
-				return c.amount;
+			if (reactants.get(i).elems.equals(c.elems)) {
+				return reactants.get(i).amount;
 			}
 		}
 		for (int i = 0; i < products.size(); i++) {
-			if (products.get(i).name.equals(c.name)) {
-				return c.amount;
+			if (products.get(i).elems.equals(c.elems)) {
+				return products.get(i).amount;
 			}
 		}
 		return 0;

@@ -11,6 +11,9 @@ public class Stoichiometry {
 
 	public String evaluate(Chemical given, String startType, Number value, Chemical target, String endType) {
 		String work = "https://latex.codecogs.com/gif.latex?";
+		work += wordsToLatex(
+				"How to find the " + endType + " of " + target.name + " given the " + startType + " of " + given.name)
+				+ ":\\newline \\newline ";
 		work += wordsToLatex("First, take the equation ") + equation.toLatexString() + "\\newline ";
 		equation.balance();
 		work += wordsToLatex("Next, balance it into ") + equation.toLatexString() + "\\newline ";
@@ -20,8 +23,8 @@ public class Stoichiometry {
 		double startVal = value.value;
 		if (startType.equals("mass")) {
 			startVal /= given.molarMass;
-			work += "\\cdot\\frac{" + given.toLatexString("1", "mol") + "}{"
-					+ given.toLatexString("" + given.molarMass, "g") + "}\\cdot";
+			work += "\\frac{" + given.toLatexString("1", "mol") + "}{" + given.toLatexString("" + given.molarMass, "g")
+					+ "}\\cdot";
 		} else if (startType.equals("volume")) {
 			startVal /= 22.4;
 			work += "\\frac{" + given.toLatexString("1", "mol") + "}{" + given.toLatexString("22.4", "L") + "}\\cdot";
