@@ -47,20 +47,3 @@ public class Stoichiometry {
 		}
 	}
 }
-class Driver {
-	public static void main(String[] args) {
-		new Stoichiometry().evaluate(new Chemical(), "mass", 10, new Chemical(), "mass");
-	}
-}
-class Chemical {
-	public double molarMass;
-	public String name;
-	public String toLatexString(double val, String unit) {
-		return "";
-	}
-}
-class Equation {
-	public int amountOf(Chemical c) {
-		return 0;
-	}
-}
