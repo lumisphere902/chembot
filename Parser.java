@@ -5,9 +5,9 @@ public class Parser {
 	public static String returnUrl(String str) {
 		StringTokenizer st = new StringTokenizer(str);
 		String typeS = st.nextToken();
-		String typeE = st.nextToken();
 		Number amount = new Number(st.nextToken());
 		Chemical given = new Chemical(st.nextToken());
+		String typeE = st.nextToken();
 		Chemical target = new Chemical(st.nextToken());
 		boolean isProduct = false;
 		ArrayList<Chemical> reactants = new ArrayList<Chemical>();
@@ -28,5 +28,11 @@ public class Parser {
 		}
 		Stoichiometry s = new Stoichiometry(new Equation(reactants, products));
 		return s.evaluate(given, typeS, amount, target, typeE);
+	}
+	
+}
+class Driver {
+	public static void main(String[] args) {
+		Parser.returnUrl("mass 27.54 O2 mass H2O H2(g) + O2(g) -> H2O(g)");
 	}
 }
