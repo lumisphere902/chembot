@@ -8,71 +8,93 @@ public class Equation {
 	public Equation(ArrayList<Chemical> r, ArrayList<Chemical> p) {
 		reactants = r;
 		products = p;
-		balanced = false;
+		balanced = true;
 	}
 
 	public void balance() {
-		balanced = true;
+		while (true) {
+			ArrayList<Element> arr = new ArrayList<>();
 
-		ArrayList<Element> arr = new ArrayList<>();
-		
-		for (int i = 0; i < reactants.size(); i++) {
-			ArrayList<Element> curElems = reactants.get(i).elems;
-			int multiple = reactants.get(i).amount;
-			for (int j = 0; j < curElems.size(); j++) {
-				Element curElem = curElems.get(j);
-				int index = arr.indexOf(curElem);
-				if (index == -1) {
-					arr.add(new Element(curElem.id, multiple * curElem.amount));
-				} else {
-					arr.get(index).amount += multiple * curElem.amount;
-				}
-			}
-		}
-		for (int i = 0; i < products.size(); i++) {
-			ArrayList<Element> curElems = products.get(i).elems;
-			int multiple = -products.get(i).amount;
-			for (int j = 0; j < curElems.size(); j++) {
-				Element curElem = curElems.get(j);
-				int index = arr.indexOf(curElem);
-				if (index == -1) {
-					arr.add(new Element(curElem.id, multiple * curElem.amount));
-				} else {
-					arr.get(index).amount += multiple * curElem.amount;
-					if (arr.get(index).amount == 0)
-						arr.remove(index);
-				}
-			}
-		}
-		while (arr.size() > 0) {
-			Element elemToChange = arr.get(0);
-			if (elemToChange.amount < 0) {
-				// add react
-				for (int i = 0; i < reactants.size(); i++) {
-					Chemical cur = reactants.get(i);
-					if (cur.elems.indexOf(elemToChange) != -1) {
-						reactants.get(i).amount++;
-						arr.get(0).amount += cur.elems.get(cur.elems.indexOf(elemToChange)).amount;
-					}
-				}
-			} else if (elemToChange.amount > 0){
-				// add prod
-				for (int i = 0; i < products.size(); i++) {
-					Chemical cur = products.get(i);
-					if (cur.elems.indexOf(elemToChange) != -1) {
-						products.get(i).amount++;
-						arr.get(0).amount -= cur.elems.get(cur.elems.indexOf(elemToChange)).amount;
+			for (int i = 0; i < reactants.size(); i++) {
+				ArrayList<Element> curElems = reactants.get(i).elems;
+				int multiple = reactants.get(i).amount;
+				for (int j = 0; j < curElems.size(); j++) {
+					Element curElem = curElems.get(j);
+					int index = indexOf(arr, curElem);
+					if (index == -1) {
+						arr.add(new Element(curElem.id, multiple * curElem.amount));
+					} else {
+						arr.get(index).amount += multiple * curElem.amount;
 					}
 				}
 			}
-			else {
-				arr.remove(0);
+			for (int i = 0; i < products.size(); i++) {
+				ArrayList<Element> curElems = products.get(i).elems;
+				int multiple = -products.get(i).amount;
+				for (int j = 0; j < curElems.size(); j++) {
+					Element curElem = curElems.get(j);
+					int index = indexOf(arr, curElem);
+					if (index == -1) {
+						arr.add(new Element(curElem.id, multiple * curElem.amount));
+					} else {
+						arr.get(index).amount += multiple * curElem.amount;
+						if (arr.get(index).amount == 0)
+							arr.remove(index);
+					}
+				}
+			}
+
+			System.out.println(arr);
+			if (arr.size() > 0) {
+				Element elemToChange = arr.get(0);
+				if (elemToChange.amount < 0) {
+					System.out.println("Adding reactant");
+					for (int i = 0; i < reactants.size(); i++) {
+						Chemical cur = reactants.get(i);
+						if (indexOf(cur.elems, elemToChange) != -1) {
+							reactants.get(i).amount++;
+							break;
+						}
+					}
+				} else{
+					System.out.println("Adding product");
+					for (int i = 0; i < products.size(); i++) {
+						Chemical cur = products.get(i);
+						if (indexOf(cur.elems, elemToChange) != -1) {
+							products.get(i).amount++;
+							break;
+						}
+					}
+				}
+			} else {
+				break;
 			}
 		}
+	}
+
+	public int indexOf(ArrayList arr, Element e) {
+		for (int i = 0; i < arr.size(); i++)
+			if (e.id == ((Element) arr.get(i)).id)
+				return i;
+		return -1;
 	}
 
 	public String toLatexString() {
 		String str = "";
+		for (int i = 0; i < reactants.size(); i++) {
+			str += reactants.get(i).toLatexStringEquation();
+			if (i < reactants.size() - 1) {
+				str += " + ";
+			} else {
+				str += " \\rightarrow ";
+			}
+		}
+		for (int i = 0; i < products.size(); i++) {
+			str += products.get(i).toLatexStringEquation();
+			if (i < products.size() - 1) {
+				str += " + ";
+			}
+		}
 		return str;
 	}
 
