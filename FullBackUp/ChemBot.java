@@ -1,6 +1,12 @@
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.StringTokenizer;
@@ -58,6 +64,7 @@ public class ChemBot extends HttpServlet {
 		} else {
 			output = "no input";
 		}
+		output = ChemBot.getImgurContent("5075047008712e4", output);
 		PrintWriter out = response.getWriter();
 		System.out.println("output: " + output);
 		out.print(output);
@@ -98,6 +105,52 @@ public class ChemBot extends HttpServlet {
 		}
 		
 		return backSlashed;
+	}
+	
+	public static String getImgurContent(String clientID, String img) {
+		try {
+			URL url;
+			url = new URL("https://api.imgur.com/3/image");
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			img = URLEncoder.encode(img, "UTF-8");
+			System.out.println(img);
+			String data = URLEncoder.encode("image", "UTF-8") + "=" + img;
+			conn.setDoOutput(true);
+			conn.setDoInput(true);
+			conn.setRequestMethod("POST");
+			conn.setRequestProperty("Authorization", "Client-ID " + clientID);
+			conn.setRequestMethod("POST");
+			conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+
+			conn.connect();
+			StringBuilder stb = new StringBuilder();
+			OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+			wr.write(data);
+			wr.flush();
+
+			System.out.println(conn);
+			// Get the response
+			if (conn.getResponseCode() > 200) {
+				BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+				while (rd.ready()) {
+					System.out.println(rd.readLine());
+				}
+				return "ERROR2";
+			} else {
+				BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+				String line;
+				while ((line = rd.readLine()) != null) {
+					stb.append(line).append("\n");
+				}
+				wr.close();
+				rd.close();
+
+				return stb.toString();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "ERROR";
 	}
 
 	/**
