@@ -12,12 +12,12 @@ public class Stoichiometry {
 		String work = "https://latex.codecogs.com/gif.latex?";
 		work += wordsToLatex(
 				"How to find the " + endType + " of " + target.name + " given the " + startType + " of " + given.name)
-				+ ":\\newline \\newline ";
-		work += wordsToLatex("First, take the equation ") + equation.toLatexString() + "\\newline ";
+				+ ":\\newline%20\\newline%20";
+		work += wordsToLatex("First, take the equation ") + equation.toLatexString() + "\\newline%20";
 		equation.balance();
-		work += wordsToLatex("Next, balance it into ") + equation.toLatexString() + "\\newline ";
+		work += wordsToLatex("Next, balance it into ") + equation.toLatexString() + "\\newline%20";
 		work += wordsToLatex("Finally, find the " + endType + " you're looking for like this:")
-				+ "\\newline \\newline ";
+				+ "\\newline%20\\newline%20";
 		work += given.toLatexString(value.toString(), getUnit(startType)) + "\\cdot";
 		double startVal = value.value;
 		if (startType.equals("mass")) {
