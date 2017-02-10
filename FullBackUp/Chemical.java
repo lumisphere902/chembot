@@ -110,6 +110,15 @@ public class Chemical implements ChemicalCompoundable {
 		if(temp.length()>2||getAtomicNumber(temp)==-1)return false;
 		return true;
 	}
+	
+	public static int getAtomicNumber(String str) {
+		for (int i = 0; i < 92; i++) {
+			if (Element.chemTable[i].equals(str)) {
+				return i;
+			}
+		}
+		return -1;
+	}
 
 	private String toWolfram(String str) {
 		StringTokenizer st = new StringTokenizer(str);
@@ -170,15 +179,6 @@ public class Chemical implements ChemicalCompoundable {
 		return rawElements;
 	}
 
-	public static int getAtomicNumber(String str) {
-		for (int i = 0; i < 92; i++) {
-			if (Element.chemTable[i].equals(str)) {
-				return i;
-			}
-		}
-		return -1;
-	}
-
 	public String toString() {
 		String str = "";
 		for (int i = 0; i < parts.length; i++) {
@@ -217,9 +217,4 @@ public class Chemical implements ChemicalCompoundable {
 	public double getMolarMass() {
 		return molarMass;
 	}
-	/*
-	 * public static double calcMolarMass(ArrayList<Element> elems){ double
-	 * total = 0; for(int i = 0;i<elems.size();i++){ Element cur = elems.get(i);
-	 * total+=cur.amount*Element.elementMass[cur.id-1]; } return total; }
-	 */
 }

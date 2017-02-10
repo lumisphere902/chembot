@@ -3,16 +3,18 @@ import java.util.StringTokenizer;
 
 public class ChemBotTestingDriver {
 	public static void main(String[] args) {
-		ArrayList<Chemical> reactants = new ArrayList<Chemical>();
-		ArrayList<Chemical> products = new ArrayList<Chemical>();
-		reactants.add(new Chemical("Cr2O7"));
-		reactants.add(new Chemical("H"));
-		products.add(new Chemical("Cr"));
-		products.add(new Chemical("H2O"));
-		Equation eq = new Equation(reactants, products);
-		System.out.println("BALANCE");
-		eq.balance();
-		System.out.println(eq.toLatexString());
+//		ArrayList<Chemical> reactants = new ArrayList<Chemical>();
+//		ArrayList<Chemical> products = new ArrayList<Chemical>();
+//		reactants.add(new Chemical("Cr2O7"));
+//		reactants.add(new Chemical("H"));
+//		products.add(new Chemical("Cr"));
+//		products.add(new Chemical("H2O"));
+//		Equation eq = new Equation(reactants, products);
+//		System.out.println("BALANCE");
+//		eq.balance();
+//		System.out.println(eq.toLatexString());
+		Chemical c = new Chemical("Magnesium nitrate");
+		System.out.println("final: "+c.debugString());
 	}
 //	public static String returnUrl(String str) {
 //		System.out.println("parsed String: "+str);
