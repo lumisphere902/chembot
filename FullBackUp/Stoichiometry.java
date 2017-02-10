@@ -18,31 +18,31 @@ public class Stoichiometry {
 		work += wordsToLatex("Next, balance it into ") + equation.toLatexString() + "\\newline%20";
 		work += wordsToLatex("Finally, find the " + endType + " you're looking for like this:")
 				+ "\\newline%20\\newline%20";
-		work += given.toLatexString(value.toString(), getUnit(startType)) + "\\cdot";
+		work += measurementToLatex(""+value.getValue(), given, getUnit(startType)) + "\\cdot";
 		double startVal = value.value;
 		if (startType.equals("mass")) {
 			startVal /= given.molarMass;
-			work += "\\frac{" + given.toLatexString("1", "mol") + "}{" + given.toLatexString("" + given.molarMass, "g")
+			work += "\\frac{" + measurementToLatex("1", given, "mol") + "}{" + measurementToLatex(""+given.molarMass, given, "g")
 					+ "}\\cdot";
 		} else if (startType.equals("volume")) {
 			startVal /= 22.4;
-			work += "\\frac{" + given.toLatexString("1", "mol") + "}{" + given.toLatexString("22.4", "L") + "}\\cdot";
+			work += "\\frac{" + measurementToLatex("1", given, "mol") + "}{" + measurementToLatex("22.4", given, "L") + "}\\cdot";
 		}
 
-		work += "\\frac{" + target.toLatexString("" + equation.amountOf(target), "mol") + "}{"
-				+ given.toLatexString("" + equation.amountOf(given), "mol") + "}\\cdot";
+		work += "\\frac{" + measurementToLatex(Integer.toString(equation.amountOf(target)), target, "mol") + "}{"
+				+ measurementToLatex(""+equation.amountOf(given), given, "mol") + "}\\cdot";
 
 		double endVal = 1;
 		if (endType.equals("mass")) {
 			endVal *= target.molarMass;
-			work += "\\frac{" + target.toLatexString("" + target.molarMass, "g") + "}{"
-					+ target.toLatexString("1", "mol") + "}";
+			work += "\\frac{" + measurementToLatex(Double.toString(target.molarMass), target, "g") + "}{"
+					+ measurementToLatex("1", target, "mol") + "}";
 		} else if (endType.equals("volume")) {
 			endVal *= 22.4;
-			work += "\\frac{" + target.toLatexString("22.4", "L") + "}{" + target.toLatexString("1", "mol") + "}";
+			work += "\\frac{" + measurementToLatex("22.4", target, "L") + "}{" + measurementToLatex("1", target, "mol") + "}";
 		}
 		double ans = startVal * equation.amountOf(target) / equation.amountOf(given) * endVal;
-		work += "=" + target.toLatexString(Number.numToString(ans, value.sigFigs), getUnit(endType));
+		work += "=" + measurementToLatex(Number.numToString(ans, value.sigFigs), target, getUnit(endType));
 		System.out.println(work);
 		return work;
 	}
@@ -70,5 +70,9 @@ public class Stoichiometry {
 			}
 		}
 		return str;
+	}
+	
+	public String measurementToLatex(String amount, Chemical chemical, String unit) {
+		return amount+"\\:"+unit+"\\:"+chemical.toLatexString();
 	}
 }

@@ -3,16 +3,23 @@ import java.util.*;
 public class Equation {
 	public ArrayList<ChemicalCompoundable> reactants;
 	public ArrayList<ChemicalCompoundable> products;
+	public int[] reactantAmounts;
+	public int[] productAmounts;
 	boolean balanced;
 
-	public Equation(ArrayList<Chemical> r, ArrayList<Chemical> p) {
+	public Equation(ArrayList<ChemicalCompoundable> r, ArrayList<ChemicalCompoundable> p) {
 		reactants = r;
 		products = p;
-		balanced = true;
+		reactantAmounts = new int[reactants.size()];
+		Arrays.fill(reactantAmounts, 1);
+		productAmounts = new int[products.size()];
+		Arrays.fill(productAmounts, 1);
+		balanced = false;
 	}
 
 	public void balance() {
-		
+		balanced = true;
+
 	}
 
 	public int indexOf(ArrayList arr, Element e) {
@@ -24,18 +31,25 @@ public class Equation {
 
 	public String toLatexString() {
 		String str = "";
+		System.out.println("reactants: " + reactants + ", products:" + products);
 		for (int i = 0; i < reactants.size(); i++) {
-			str += reactants.get(i).toLatexStringEquation();
+			if (reactantAmounts[i] != 1) {
+				str += reactantAmounts[i];
+			}
+			str += reactants.get(i).toLatexString();
 			if (i < reactants.size() - 1) {
-				str += " + ";
+				str += "%20+%20";
 			} else {
-				str += " \\rightarrow ";
+				str += "%20\\rightarrow%20";
 			}
 		}
 		for (int i = 0; i < products.size(); i++) {
-			str += products.get(i).toLatexStringEquation();
+			if (productAmounts[i] != 1) {
+				str += productAmounts[i];
+			}
+			str += products.get(i).toLatexString();
 			if (i < products.size() - 1) {
-				str += " + ";
+				str += "%20+%20";
 			}
 		}
 		return str;
@@ -43,13 +57,13 @@ public class Equation {
 
 	public int amountOf(Chemical c) {
 		for (int i = 0; i < reactants.size(); i++) {
-			if (reactants.get(i).elems.equals(c.elems)) {
-				return reactants.get(i).amount;
+			if (reactants.get(i).getElements().equals(c.getElements())) {
+				return reactantAmounts[i];
 			}
 		}
 		for (int i = 0; i < products.size(); i++) {
-			if (products.get(i).elems.equals(c.elems)) {
-				return products.get(i).amount;
+			if (products.get(i).getElements().equals(c.getElements())) {
+				return productAmounts[i];
 			}
 		}
 		return 0;

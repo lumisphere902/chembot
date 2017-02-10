@@ -73,8 +73,8 @@ public class ChemBot extends HttpServlet {
 		String typeE = st.nextToken();
 		Chemical target = new Chemical(st.nextToken());
 		boolean isProduct = false;
-		ArrayList<Chemical> reactants = new ArrayList<Chemical>();
-		ArrayList<Chemical> products = new ArrayList<Chemical>();
+		ArrayList<ChemicalCompoundable> reactants = new ArrayList<ChemicalCompoundable>();
+		ArrayList<ChemicalCompoundable> products = new ArrayList<ChemicalCompoundable>();
 		while (st.hasMoreTokens()) {
 			String token = st.nextToken();
 			if (token.equals("->")) {
