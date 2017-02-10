@@ -43,7 +43,14 @@ public class Stoichiometry {
 		}
 		double ans = startVal * equation.amountOf(target) / equation.amountOf(given) * endVal;
 		work += "=" + measurementToLatex(Number.numToString(ans, value.sigFigs), target, getUnit(endType));
-		System.out.println(work);
+		String backSlashed = "";
+		for (int i = 0; i < work.length(); i++) {
+			if (work.charAt(i) == '\\') {
+				backSlashed += '\\';
+			}
+			backSlashed += work.charAt(i);
+		}
+		System.out.println(ChemBot.getImgurContent("5075047008712e4", work));
 		return work;
 	}
 

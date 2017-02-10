@@ -17,15 +17,14 @@ public class Chemical implements ChemicalCompoundable {
 	public double molarMass;
 
 	public Chemical(String formula) {
-		this(formula, 1, "Unknown");
+		this(formula, 1);
 	}
 
-	public Chemical(String formula, int amount) {
-		this(formula, amount, "Unknown");
-	}
-
-	public Chemical(String str, int amount, String name) {
+	public Chemical(String str, int amount) {
+		boolean nameFound = false;
 		if (!isFormula(str)) {
+			name = str;
+			nameFound = true;
 			System.out.println("detected it's a name");
 			try {
 				URL url;
@@ -48,7 +47,7 @@ public class Chemical implements ChemicalCompoundable {
 				} else {
 					BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 					str = rd.readLine();
-					str = str.substring(1,str.length()-1);
+					str = str.substring(1, str.length() - 1);
 					wr.close();
 					rd.close();
 				}
@@ -56,8 +55,7 @@ public class Chemical implements ChemicalCompoundable {
 				e.printStackTrace();
 			}
 		}
-		System.out.println("Formula name: "+str);
-		this.name = name;
+		System.out.println("Formula name: " + str);
 		this.amount = amount;
 		ArrayList<String> split = splitString(str);
 		int numObj = split.size();
@@ -90,27 +88,32 @@ public class Chemical implements ChemicalCompoundable {
 			molarMass += parts[i].getMolarMass();
 			addOnElements(parts[i].getElements());
 		}
-
+		System.out.println(nameFound);
+		if (!nameFound) {
+			name = this.toLatexString();
+		}
 	}
 
 	public static boolean isFormula(String str) {
 		String temp = "";
 		for (int i = 0; i < str.length(); i++) {
 			char cur = str.charAt(i);
-			if(Character.isDigit(cur)){
+			if (Character.isDigit(cur)) {
 				return true;
 			}
-			if(Character.isUpperCase(cur)){
-				if(temp.length()>2||(!temp.isEmpty()&&getAtomicNumber(temp)==-1))return false;
-				temp=""+cur;
-			}else{
-				temp+=cur;
+			if (Character.isUpperCase(cur)) {
+				if (temp.length() > 2 || (!temp.isEmpty() && getAtomicNumber(temp) == -1))
+					return false;
+				temp = "" + cur;
+			} else {
+				temp += cur;
 			}
 		}
-		if(temp.length()>2||getAtomicNumber(temp)==-1)return false;
+		if (temp.length() > 2 || getAtomicNumber(temp) == -1)
+			return false;
 		return true;
 	}
-	
+
 	public static int getAtomicNumber(String str) {
 		for (int i = 0; i < 92; i++) {
 			if (Element.chemTable[i].equals(str)) {
@@ -187,21 +190,22 @@ public class Chemical implements ChemicalCompoundable {
 		}
 		return amount > 1 ? "(" + str + ")" + amount : str;
 	}
-	public String debugString(){
+
+	public String debugString() {
 		System.out.println(parts.length);
 		String str = "{";
 		for (int i = 0; i < parts.length; i++) {
 			Object cur = parts[i];
-			if(cur instanceof Chemical){
-				str += ((Chemical)cur).debugString();
-			}else{
+			if (cur instanceof Chemical) {
+				str += ((Chemical) cur).debugString();
+			} else {
 				str += cur.toString();
 			}
-			str+=',';
+			str += ',';
 		}
-		str=str.substring(0, str.length()-1);
-		str+='}';
-		return str+":"+amount;
+		str = str.substring(0, str.length() - 1);
+		str += '}';
+		return str + ":" + amount;
 	}
 
 	public String toLatexString() {

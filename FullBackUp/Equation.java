@@ -16,6 +16,29 @@ public class Equation {
 		Arrays.fill(productAmounts, 1);
 		balanced = false;
 	}
+	public Equation(String str) {
+		StringTokenizer st = new StringTokenizer(str);
+		boolean isProduct = false;
+		reactants = new ArrayList<ChemicalCompoundable>();
+		products = new ArrayList<ChemicalCompoundable>();
+		while (st.hasMoreTokens()) {
+			String token = st.nextToken();
+			if (token.equals("->")) {
+				isProduct = true;
+			} else if (!token.equals("+")) {
+				if (isProduct) {
+					products.add(new Chemical(token));
+				} else {
+					reactants.add(new Chemical(token));
+				}
+			}
+		}
+		reactantAmounts = new int[reactants.size()];
+		Arrays.fill(reactantAmounts, 1);
+		productAmounts = new int[products.size()];
+		Arrays.fill(productAmounts, 1);
+		balanced = false;
+	}
 
 	public void balance() {
 		balanced = true;
